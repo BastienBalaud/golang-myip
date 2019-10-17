@@ -7,6 +7,7 @@ import (
  "log"
  "net"
  "time"
+ "strconv"
 )
 
 func main() {
@@ -17,7 +18,7 @@ func main() {
  arg.MustParse(&args)
  fmt.Println("Listen on port", args.Port)
  srv := &http.Server{
-    Addr: ":8080",
+    Addr: ":"+strconv.Itoa(args.Port),
     ReadTimeout: 5 * time.Second,
     WriteTimeout: 10 * time.Second,
 }
@@ -33,6 +34,13 @@ func main() {
 func rootPage(w http.ResponseWriter, r *http.Request) {
  response := "Your IP is "+ getIp(r) + "\n"
  response += "Your user Agent is "+ r.Header.Get("User-Agent") + "\n"
+ response += "Your request header is : \n"
+ for name, values := range r.Header {
+    // Loop over all values for the name.
+    for _, value := range values {
+        response += name+" : "+value+"\n"
+    }
+ }
  w.Write([]byte(response))
 }
 func ipPage(w http.ResponseWriter, r *http.Request){
@@ -44,8 +52,15 @@ func uaPage(w http.ResponseWriter, r *http.Request){
  w.Write([]byte(response))
 }
 func headerPage(w http.ResponseWriter, r *http.Request){
- response := "Your user Agent is "+ r.Header.Get("") + "\n"
+ response := "Your request header is : \n"
+ for name, values := range r.Header {
+    // Loop over all values for the name.
+    for _, value := range values {
+        response += name+" : "+value+"\n"
+    }
+}
  w.Write([]byte(response))
+
 }
 func getIp(r *http.Request) (string){
   ip,_,_ := net.SplitHostPort(r.RemoteAddr)
