@@ -63,6 +63,13 @@ func headerPage(w http.ResponseWriter, r *http.Request){
 
 }
 func getIp(r *http.Request) (string){
-  ip,_,_ := net.SplitHostPort(r.RemoteAddr)
-  return ip
+  if r.Header.Get("X-Forwarded-For")!= ""{
+    ip := r.Header.Get("X-Forwarded-For")
+    return ip
+  }else{
+    ip,_,_ := net.SplitHostPort(r.RemoteAddr)
+    return ip
+  }
+
 }
+
