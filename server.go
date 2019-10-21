@@ -44,8 +44,7 @@ func rootPage(w http.ResponseWriter, r *http.Request) {
  w.Write([]byte(response))
 }
 func ipPage(w http.ResponseWriter, r *http.Request){
- ip,_,_ := net.SplitHostPort(r.RemoteAddr)
- w.Write([]byte(ip))
+ w.Write([]byte(getIp(r)))
 }
 func uaPage(w http.ResponseWriter, r *http.Request){
  response := "Your user Agent is "+ r.Header.Get("User-Agent") + "\n"
