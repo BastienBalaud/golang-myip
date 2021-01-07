@@ -28,6 +28,7 @@ func main() {
  http.HandleFunc("/ip",ipPage)
  http.HandleFunc("/ua", uaPage)
  http.HandleFunc("/header", headerPage)
+ http.HandleFunc("/hc", hc)
  log.Fatal(srv.ListenAndServe())
 }
 
@@ -61,6 +62,10 @@ func headerPage(w http.ResponseWriter, r *http.Request){
 }
  w.Write([]byte(response))
 
+}
+func hc(w http.ResponseWriter, r *http.Request){
+    response := "Up\n"
+    w.Write([]byte(response))
 }
 func getIp(r *http.Request) (string){
   if r.Header.Get("X-Forwarded-For")!= ""{

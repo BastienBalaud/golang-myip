@@ -12,3 +12,4 @@
 *.out
 #Build folder
 build/*
+.idea/*
