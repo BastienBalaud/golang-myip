@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-
 # Test binary, build with `go test -c`
 *.test
 
@@ -12,3 +11,5 @@
 *.out
 #Build folder
 build/*
+#IDE Folder
+.idea/

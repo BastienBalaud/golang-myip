@@ -6,7 +6,8 @@ import (
  "github.com/alexflint/go-arg"
  "log"
  "net"
- "time"
+    "strings"
+    "time"
  "strconv"
 )
 
@@ -28,24 +29,41 @@ func main() {
  http.HandleFunc("/ip",ipPage)
  http.HandleFunc("/ua", uaPage)
  http.HandleFunc("/header", headerPage)
+ http.HandleFunc("/health",getHealth)
  log.Fatal(srv.ListenAndServe())
 }
 
 func rootPage(w http.ResponseWriter, r *http.Request) {
- response := "Your IP is "+ getIp(r) + "\n"
- response += "Your user Agent is "+ r.Header.Get("User-Agent") + "\n"
- response += "Your request header is : \n"
- for name, values := range r.Header {
-    // Loop over all values for the name.
-    for _, value := range values {
-        response += name+" : "+value+"\n"
+    switch r.Method {
+    case http.MethodHead:
+        for name, values := range r.Header {
+            // Loop over all values for the name.
+                w.Header().Add("Request-"+name,strings.Join(values," "))
+        }
+        w.Header().Add("Your IP",getIp(r))
+        w.Write([]byte(""))
+    default:
+        response := "Your IP is "+ getIp(r) + "\n"
+        response += "Your user Agent is "+ r.Header.Get("User-Agent") + "\n"
+        response += "Your request header is : \n"
+        for name, values := range r.Header {
+            // Loop over all values for the name.
+            for _, value := range values {
+                response += name+" : "+value+"\n"
+            }
+        }
+        w.Write([]byte(response))
     }
- }
- w.Write([]byte(response))
 }
 func ipPage(w http.ResponseWriter, r *http.Request){
-	response := getIp(r) + "\n"
- w.Write([]byte(response))
+
+    switch r.Method {
+    case http.MethodHead:
+        w.Header().Add("Your IP",getIp(r))
+    default:
+        response := getIp(r) + "\n"
+        w.Write([]byte(response))
+    }
 }
 func uaPage(w http.ResponseWriter, r *http.Request){
  response := "Your user Agent is "+ r.Header.Get("User-Agent") + "\n"
@@ -71,4 +89,8 @@ func getIp(r *http.Request) (string){
     return ip
   }
 
+}
+
+func getHealth(w http.ResponseWriter,_ *http.Request){
+    w.Write([]byte("Ok"))
 }
