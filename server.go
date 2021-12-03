@@ -55,6 +55,7 @@ func rootPage(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte(response))
     }
 }
+
 func ipPage(w http.ResponseWriter, r *http.Request){
 
     switch r.Method {
@@ -65,10 +66,12 @@ func ipPage(w http.ResponseWriter, r *http.Request){
         w.Write([]byte(response))
     }
 }
+
 func uaPage(w http.ResponseWriter, r *http.Request){
  response := "Your user Agent is "+ r.Header.Get("User-Agent") + "\n"
  w.Write([]byte(response))
 }
+
 func headerPage(w http.ResponseWriter, r *http.Request){
  response := "Your request header is : \n"
  for name, values := range r.Header {
@@ -78,8 +81,8 @@ func headerPage(w http.ResponseWriter, r *http.Request){
     }
 }
  w.Write([]byte(response))
-
 }
+
 func getIp(r *http.Request) (string){
   if r.Header.Get("X-Forwarded-For")!= ""{
     ip := r.Header.Get("X-Forwarded-For")
@@ -88,7 +91,6 @@ func getIp(r *http.Request) (string){
     ip,_,_ := net.SplitHostPort(r.RemoteAddr)
     return ip
   }
-
 }
 
 func getHealth(w http.ResponseWriter,_ *http.Request){

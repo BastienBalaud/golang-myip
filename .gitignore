@@ -11,5 +11,4 @@
 *.out
 #Build folder
 build/*
-#IDE Folder
-.idea/
+.idea/*
