@@ -40,7 +40,7 @@ func rootPage(w http.ResponseWriter, r *http.Request) {
             // Loop over all values for the name.
                 w.Header().Add("Request-"+name,strings.Join(values," "))
         }
-        w.Header().Add("Your IP",getIp(r))
+        w.Header().Add("Your-IP",getIp(r))
         w.Write([]byte(""))
     default:
         response := "Your IP is "+ getIp(r) + "\n"
